@@ -1,0 +1,6 @@
+django
+numpy
+scipy
+cython
+python-decouple
+gunicorn

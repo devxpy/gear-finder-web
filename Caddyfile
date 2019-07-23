@@ -1,0 +1,6 @@
+0.0.0.0:80
+log stdout
+root ./staticfiles
+proxy / unix:/usr/src/app/gunicorn.sock {
+    header_upstream Host {host}
+}
