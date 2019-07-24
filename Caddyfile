@@ -1,6 +1,6 @@
 0.0.0.0:80
 log stdout
-root ./staticfiles
 proxy / unix:/usr/src/app/gunicorn.sock {
+    except /{%STATIC_ROOT%}
     header_upstream Host {host}
 }

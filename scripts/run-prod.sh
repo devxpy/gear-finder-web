@@ -8,7 +8,7 @@ tar -xjf deps.tar.bz2 .
 export PYTHONPATH=$PYTHONPATH:$PWD
 export PATH=$PATH:$PWD/bin
 
-python setup.py install
+python setup.py build_ext --inplace
 
 python manage.py collectstatic --no-input
 python manage.py migrate
