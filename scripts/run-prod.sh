@@ -2,7 +2,9 @@
 
 set -x
 
-tar -xjf deps.tar.bz2
+wget -qO deps.tar.bz2 "https://saral-data-bucket.s3.ap-south-1.amazonaws.com/dev/deps.tar.bz2"
+tar -xjf deps.tar.bz2 .
+
 export PYTHONPATH=$PYTHONPATH:$PWD
 export PATH=$PATH:$PWD/bin
 
