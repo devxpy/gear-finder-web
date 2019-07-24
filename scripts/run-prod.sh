@@ -13,5 +13,5 @@ python python setup.py install
 python manage.py collectstatic --no-input
 python manage.py migrate
 
-nohup caddy &
+nohup ./caddy &
 gunicorn config.wsgi --bind unix:/usr/src/app/gunicorn.sock
