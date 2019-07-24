@@ -7,4 +7,4 @@ WORKDIR /usr/src/app
 COPY --from=caddy /usr/bin/caddy .
 COPY . /usr/src/app
 
-CMD run-prod.sh
+CMD /usr/src/app/scripts/run-prod.sh
