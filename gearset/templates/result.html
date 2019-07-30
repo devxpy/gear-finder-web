@@ -1,0 +1,40 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gear Finder Result</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/table.css' %}">
+</head>
+<body>
+<h1>Input</h1>
+<table>
+    <tr>
+        <td>Target (t)</td>
+        <td>{{ target }}</td>
+    </tr>
+    <tr>
+        <td>Tolerance</td>
+        <td>{{ tolerance }}</td>
+    </tr>
+    <tr>
+        <td>Gear set name</td>
+        <td>{{ gear_set_name }}</td>
+    </tr>
+    <tr>
+        <td>Gear set values</td>
+        <td>{{ gear_set_values }}</td>
+    </tr>
+    <tr>
+        <td>Time</td>
+        <td>{{ time }}</td>
+    </tr>
+</table>
+
+<h1>Result</h1>
+
+{{ result_table }}
+</body>
+</html>
