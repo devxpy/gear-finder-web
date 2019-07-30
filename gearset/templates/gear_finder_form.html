@@ -12,11 +12,14 @@
     </style>
 </head>
 <body>
-<form method="post">{% csrf_token %}
+<form method="post">
+    {% csrf_token %}
     {{ form.as_p }}
     <input style="font-size: large" type="submit" value="Submit">
 </form>
+
 <hr>
+
 <a href=" {% url 'admin:gearset_gearset_changelist' %}">
     <button>Configure</button>
 </a>

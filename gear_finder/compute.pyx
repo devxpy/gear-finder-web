@@ -65,25 +65,27 @@ cdef Filtered filter(
     double target,
     double tolerance,
 ):
-    cdef np.ndarray[FLOAT_T] diff1, diff2
+    cdef np.ndarray[FLOAT_T] diff1, diff2, diffs
     cdef np.ndarray[BOOL_T, cast=True] filter1, filter2
     cdef np.ndarray[INT_T] sort_order
-    cdef Filtered result
+    cdef Filtered result  = Filtered()
 
     diff1 = np.absolute(ratios[0] - target)
     diff2 = np.absolute(ratios[1] - target)
 
     filter1 = diff1 <= tolerance
     filter2 = diff2 <= tolerance
-    result = Filtered()
 
-    result.diffs = np.concatenate([diff1[filter1], diff2[filter2]])
-    sort_order = np.argsort(result.diffs)
+    diffs = np.concatenate([diff1[filter1], diff2[filter2]])
+    sort_order = np.argsort(diffs)
 
-    result.ratios = np.concatenate(ratios)[sort_order]
-
+    result.diffs = diffs[sort_order]
+    result.ratios = np.concatenate([ratios[0][filter1], ratios[1][filter2]])[sort_order]
     result.combinations = np.concatenate(
-        [combinations[filter1][:, [0, 2, 1, 3]], combinations[filter2][:,[ 2, 0, 3, 1]]]
+        [
+            combinations[filter1][:, [0, 2, 1, 3]],
+            combinations[filter2][:, [2, 0, 3, 1]]
+        ]
     )[sort_order]
 
     return result
