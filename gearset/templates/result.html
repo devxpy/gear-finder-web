@@ -1,4 +1,5 @@
 {% load static %}
+{% load humanize %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -69,6 +70,9 @@
 </table>
 
 <h1>Result</h1>
+(Total: {{ count | intword | intcomma }})
+<br>
+<br>
 
 {{ result_table }}
 </body>

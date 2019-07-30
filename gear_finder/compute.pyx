@@ -1,5 +1,6 @@
 import io
 from collections import Iterable
+from typing import Tuple
 import cython
 
 import numpy as np
@@ -101,7 +102,7 @@ cdef str to_html(Filtered filtered):
     f.write(table_header)
     f.write("</tr></thead><tbody>")
 
-    for i in range(len(filtered.combinations)):
+    for i in range(len(filtered.ratios)):
         c = filtered.combinations[i]
         r = filtered.ratios[i]
         d = filtered.diffs[i]
@@ -119,12 +120,13 @@ cdef str to_html(Filtered filtered):
 cdef dict cache = {}
 
 
-def compute(it: Iterable[int], double target, double tolerance) -> str:
+def compute(it: Iterable[int], double target, double tolerance) -> Tuple[int, str]:
     cdef np.ndarray[INT_T] gset
     cdef np.ndarray[INT_T, ndim=2] c
     cdef np.ndarray[FLOAT_T, ndim=2] r
     cdef int key
     cdef tuple values
+    cdef Filtered f
 
     values = tuple(it)
     key = hash(values)
@@ -139,4 +141,5 @@ def compute(it: Iterable[int], double target, double tolerance) -> str:
         r = ratios(c)
         cache[key] = c, r
 
-    return to_html(filter(c, r, target, tolerance))
+    f = filter(c, r, target, tolerance)
+    return len(f.ratios), to_html(f)

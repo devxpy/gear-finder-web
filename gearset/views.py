@@ -17,12 +17,14 @@ class GearFinderFormView(FormView):
         gset_values = gset.get_set()
         target = form.cleaned_data["target"]
         tolerance = form.cleaned_data["tolerance"]
+        count, table = compute(gset_values, target, tolerance)
 
         return render(
             self.request,
             "result.html",
             dict(
-                result_table=mark_safe(compute(gset_values, target, tolerance)),
+                result_table=mark_safe(table),
+                count=count,
                 target=target,
                 tolerance=tolerance,
                 gear_set_name=gset,
