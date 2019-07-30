@@ -8,10 +8,9 @@ tar -xjf deps.tar.bz2 .
 export PYTHONPATH=$PYTHONPATH:$PWD
 export PATH=$PATH:$PWD/bin
 
-python setup.py build_ext --inplace
+./pre-deploy.sh
 
 python manage.py collectstatic --no-input
 python manage.py migrate
 
-nohup ./caddy &
 gunicorn gear_finder.wsgi --bind unix:/usr/src/app/gunicorn.sock

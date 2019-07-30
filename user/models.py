@@ -33,6 +33,7 @@ class CustomUserManager(UserManager):
 
 class CustomUser(AbstractUser):
     email = models.EmailField(_("email address"), unique=True)
+    username = None
 
     objects = CustomUserManager()
 
