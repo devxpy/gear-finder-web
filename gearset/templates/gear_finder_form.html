@@ -4,13 +4,21 @@
     <meta charset="UTF-8">
     <title>Gear Finder Form</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+          text-align: center;
+          font-family: sans-serif;
+        }
+    </style>
 </head>
-<body style="text-align: center;">
-    <form method="post">{% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Submit">
-    </form>
-    <hr>
-    <a href="{% url 'admin:gearset_gearset_changelist' %}">configure</a>
+<body>
+<form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input style="font-size: large" type="submit" value="Submit">
+</form>
+<hr>
+<a href=" {% url 'admin:gearset_gearset_changelist' %}">
+    <button>Configure</button>
+</a>
 </body>
 </html>

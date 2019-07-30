@@ -1,5 +1,6 @@
 import io
 from collections import Iterable
+import cython
 
 import numpy as np
 cimport numpy as np
@@ -25,7 +26,7 @@ cdef np.ndarray[INT_T, ndim=2] combinations(long[:] gset):
     two_pairs = np.empty([int(comb(len(gset), 2)), 2], dtype=np.int)
     four_pairs = np.empty([int(comb(len(two_pairs), 2)), 4], dtype=np.int)
 
-    with nogil:
+    with nogil, cython.boundscheck(False):
         k = 0
         for i in range(len(gset) - 1):
             for j in range(i + 1, len(gset)):
