@@ -1,7 +1,7 @@
 .idea/
 gear_finder/*.c
 gear_finder/*.html
-deps.tar.bz2
+gear_finder_deps.tar.bz2
 temporary-captain-to-deploy.tar
 
 # Created by https://www.gitignore.io/api/python,pycharm
