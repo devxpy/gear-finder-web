@@ -2,7 +2,7 @@
 
 set -ex
 
-docker run \
+docker run -it \
     -v $PWD:$PWD \
     -v $HOME/.cache/pip:/root/.cache/pip \
     -w $PWD \
