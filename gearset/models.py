@@ -1,11 +1,11 @@
-from typing import Set
+import typing as T
 
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext as _
 
 
-def parse_gearset_spec(value: str) -> Set[int]:
+def parse_gearset_spec(value: str) -> T.Set[int]:
     lines = [i.strip() for i in value.split()]
     gearset = set()
     for i in lines:
@@ -42,5 +42,11 @@ class GearSet(models.Model):
     def __str__(self):
         return self.name
 
-    def get_set(self):
+    def get_kv(self) -> T.Tuple[int, T.List[float]]:
+        v = list(self.get_set())
+        v.sort()
+        k = hash(tuple(v))
+        return k, v
+
+    def get_set(self) -> T.Set[int]:
         return parse_gearset_spec(self.spec)

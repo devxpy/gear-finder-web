@@ -1,6 +1,6 @@
 import io
 from collections import Iterable
-from typing import Tuple
+import typing as T
 import cython
 
 import numpy as np
@@ -12,12 +12,43 @@ ctypedef np.int_t INT_T
 ctypedef np.float_t FLOAT_T
 ctypedef np.uint8_t BOOL_T
 
-
-cdef str table_header = "".join(
+cdef str TABLE_HEADER = "".join(
     f"<th>{i}</th>" for i in [
         "a", "b", "c", "d", "Ratio<br>(r = a/b x c/d)", "Deviation<br>(d = t - r)"
     ]
 )
+
+cdef dict CACHE = {}
+
+
+cdef class Filtered:
+    cdef long[:, :] combinations
+    cdef double[:] ratios
+    cdef double[:] diffs
+
+
+def compute(long key, list gset, double target, double tolerance):
+    cdef Filtered f
+    cdef np.ndarray[INT_T, ndim=2] c
+    cdef np.ndarray[FLOAT_T, ndim=2] r
+
+    if key not in CACHE:
+        build_cache(key, gset)
+    c, r = CACHE[key]
+
+    f = filter(c, r, target, tolerance)
+    return len(f.ratios), to_html(f)
+
+
+def build_cache(long key, list gset):
+    cdef np.ndarray[INT_T] gset_arr
+    cdef np.ndarray[INT_T, ndim=2] c
+    cdef np.ndarray[FLOAT_T, ndim=2] r
+
+    gset_arr = np.array(gset, dtype=np.int)
+    c = combinations(gset_arr)
+    r = ratios(c)
+    CACHE[key] = c, r
 
 
 cdef np.ndarray[INT_T, ndim=2] combinations(long[:] gset):
@@ -54,12 +85,6 @@ cdef np.ndarray[FLOAT_T, ndim=2] ratios(np.ndarray[INT_T, ndim=2] arr):
     )
 
 
-cdef class Filtered:
-    cdef long[:, :] combinations
-    cdef double[:] ratios
-    cdef double[:] diffs
-
-
 cdef Filtered filter(
     np.ndarray[INT_T, ndim=2] combinations,
     np.ndarray[FLOAT_T, ndim=2] ratios,
@@ -69,7 +94,7 @@ cdef Filtered filter(
     cdef np.ndarray[FLOAT_T] diff1, diff2, diffs
     cdef np.ndarray[BOOL_T, cast=True] filter1, filter2
     cdef np.ndarray[INT_T] sort_order
-    cdef Filtered result  = Filtered()
+    cdef Filtered result
 
     diff1 = np.absolute(ratios[0] - target)
     diff2 = np.absolute(ratios[1] - target)
@@ -80,6 +105,7 @@ cdef Filtered filter(
     diffs = np.concatenate([diff1[filter1], diff2[filter2]])
     sort_order = np.argsort(diffs)
 
+    result = Filtered()
     result.diffs = diffs[sort_order]
     result.ratios = np.concatenate([ratios[0][filter1], ratios[1][filter2]])[sort_order]
     result.combinations = np.concatenate(
@@ -99,7 +125,7 @@ cdef str to_html(Filtered filtered):
 
     f = io.StringIO()
     f.write("<table><thead><tr>")
-    f.write(table_header)
+    f.write(TABLE_HEADER)
     f.write("</tr></thead><tbody>")
 
     for i in range(len(filtered.ratios)):
@@ -115,31 +141,3 @@ cdef str to_html(Filtered filtered):
 
     f.seek(0)
     return f.read()
-
-
-cdef dict cache = {}
-
-
-def compute(it: Iterable[int], double target, double tolerance) -> Tuple[int, str]:
-    cdef np.ndarray[INT_T] gset
-    cdef np.ndarray[INT_T, ndim=2] c
-    cdef np.ndarray[FLOAT_T, ndim=2] r
-    cdef int key
-    cdef tuple values
-    cdef Filtered f
-
-    values = tuple(it)
-    key = hash(values)
-
-    gset = np.array(values, dtype=np.int)
-    gset.sort()
-
-    try:
-        c, r = cache[key]
-    except KeyError:
-        c = combinations(gset)
-        r = ratios(c)
-        cache[key] = c, r
-
-    f = filter(c, r, target, tolerance)
-    return len(f.ratios), to_html(f)
