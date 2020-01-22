@@ -2,7 +2,7 @@
 
 set -ex
 
-rm -r deps
+rm -rf deps
 pip install . --target deps
 cd deps
 tar -cjf ../gear_finder_deps.tar.bz2 .
