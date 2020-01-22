@@ -8,4 +8,5 @@ tar -xjf deps.tar.bz2 .
 export PYTHONPATH=$PYTHONPATH:$PWD
 export PATH=$PATH:$PWD/bin
 
+python setup.py build_ext --inplace
 nohup ./caddy -conf scripts/Caddyfile &
