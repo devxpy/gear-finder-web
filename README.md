@@ -34,6 +34,10 @@ by explioting the commutative property of multiplication, i.e. -
 
 ---
 
+The permutation [results are sorted](https://github.com/devxpy/gear-finder-web/blob/fe7132d980af2e4a388dc6b6b073bbde442bfcf2/gear_finder/compute.pyx#L106) based on the deviation from the required ratio.
+
+---
+
 The optimized Cython code also generates [HTML output directly](https://github.com/devxpy/gear-finder-web/blob/e382e768f5e2fe0845b7bca8026f65cd5d36cab5/gear_finder/compute.pyx#L121).
 
 ---
