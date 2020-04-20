@@ -18,7 +18,7 @@ Therefore, we make use of [Cython](https://cython.org/) to create a C-extension 
 This let's us achieve near C-speeds, while still being able to use Python lanague features.
 
 The result is a [fast compute core](https://github.com/devxpy/gear-finder-web/blob/master/gear_finder/compute.pyx), 
-that the Django web app can call.
+that the Django web app [can call](https://github.com/devxpy/gear-finder-web/blob/e382e768f5e2fe0845b7bca8026f65cd5d36cab5/gearset/views.py#L22).
 
 ---
 
